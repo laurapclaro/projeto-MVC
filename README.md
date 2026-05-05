@@ -3,3 +3,4 @@
 
 # gerar a migration 
 # python -m alembic revision --autogenerate -m "Criar tabela usuarios"
+
