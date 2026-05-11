@@ -20,5 +20,15 @@ def tela_cadastro(request: Request):
     return templates.TemplateResponse(
         request,
         "auth/cadastro.html",
-        {"request"}
+        {"request": request}
+    )
+
+# Exibir tela de login
+@router.get("/cadastro")
+def tela_login(request: Request):
+    return templates.TemplateResponse(
+        request,
+        "auth/login.html",
+        {"request": request}
+
     )
