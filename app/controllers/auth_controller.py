@@ -1,5 +1,4 @@
-from fastapi import Request
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, Request, Form, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -32,3 +31,95 @@ def tela_login(request: Request):
         {"request": request}
 
     )
+
+# Criar o usuario no banco - cadastrar usuario
+@router.post("/cadastro")
+def cadastrar_user(
+    request: Request,
+    nome: str = Form(...),
+    email: str = Form(...),
+    senha: str = Form(...),
+    db: Session = Depends(get_db)
+
+):
+#verificar se email esta cadastrado
+
+    user_existente = db.query(Usuario).filter_by(email=email).first()
+
+    if user_existente:
+    #Retorna o formulario com mensagem de erro
+        return templates.TemplateResponse(
+        request,
+        "auth/cadastro.html",
+        {"request": request, "erro": "Este e-mail já está cadastrado"}
+    )
+
+    # Criar o novo usuario com senha hash
+
+    novo_usuario = Usuario(
+        nome=nome,
+        email=email,
+        senha_hash =hash_senha(senha), #nunca salve a senha pura no db
+
+
+    )
+
+    db.add(novo_usuario)
+    db.commit()
+
+    # Redirecionar para login apos cadastro
+    return RedirectResponse(url="/auth/login?cadastro=ok", status_code=302)
+
+
+# Rota de login
+@router.post("/login")
+def fazer_login(
+    request: Request,
+    email: str = Form(...),
+    senha: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    #Buscar o usuario no banco pelo email
+
+    usuario = db.query(Usuario).filter_by(email=email).first()
+
+    #Verificar a senha com bcrypt
+
+    senha_correta = ( usuario is not None and verificar_senha(senha, usuario.senha_hash))
+
+    if not senha_correta:
+        return templates.TemplateResponse(
+            request,
+            "auth/login.html",
+            {"request": request, "erro": "E-mail ou senha incorretas."}
+        )
+    if not usuario.ativo:
+         return templates.TemplateResponse(
+            request,
+            "auth/login.html",
+            {"request": request, "erro": "Usuario Inativo."}
+        )
+
+   #Gerar o token JWT
+
+token_data = {
+       "sub": usuario.email,
+       "nome": usuario.nome,
+       "role": usuario.role,
+       "id": usuario.id,
+       
+   }
+token = criar_token(token_data)
+
+#Salvar o token em cookie Httponly
+
+response = RedirectResponse(url="/", status_code=302)
+
+response.set_cookie(
+    key="access_token",
+    value=token,
+    httponly=True,
+    max_age=3600,
+    semesite="lax"
+
+)

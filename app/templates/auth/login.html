@@ -8,6 +8,9 @@
 <body>
     <h1>Entrar no Sistema</h1>
     <form action="/auth/login" method="post">
+
+    {% if request.query_params.get("cadastro") == "ok" %}
+    <p style="color: green;">cadastro realizado!</p>
         Nome: <input type="text" name="nome">
         <br><br>
         E-mail: <input type="email" name="email" required>
