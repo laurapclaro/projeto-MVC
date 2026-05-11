@@ -103,10 +103,10 @@ def fazer_login(
    #Gerar o token JWT
 
 token_data = {
-       "sub": usuario.email,
-       "nome": usuario.nome,
-       "role": usuario.role,
-       "id": usuario.id,
+       "sub": Usuario.email,
+       "nome": Usuario.nome,
+       "role": Usuario.role,
+       "id": Usuario.id,
        
    }
 token = criar_token(token_data)
