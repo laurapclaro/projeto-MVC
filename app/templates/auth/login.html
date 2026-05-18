@@ -10,22 +10,24 @@
     <form action="/auth/login" method="post">
 
     {% if request.query_params.get("cadastro") == "ok" %}
-    <p style="color: green;">cadastro realizado!</p>
-        Nome: <input type="text" name="nome">
-        <br><br>
+        <p style="color: green;">cadastro realizado!</p>
+    {% endif %}
+
         E-mail: <input type="email" name="email" required>
         <br><br>
         Senha: <input type="password" name="senha">
         <br><br>
+
         {% if erro %}
             <p style="color: red;">{{ erro }}</p>
-        {% edif %}
+        {% endif %}
+        
         <button type="submit">Entrar</button>
     
 
 
     </form>
-    <p>Não tem conta? <a href="auth/cadastro">Cadastra-se</a></p>
+    <p>Não tem conta? <a href="/auth/cadastro">Cadastra-se</a></p>
     
 </body>
 </html>

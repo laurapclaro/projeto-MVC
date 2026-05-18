@@ -23,7 +23,7 @@ def tela_cadastro(request: Request):
     )
 
 # Exibir tela de login
-@router.get("/cadastro")
+@router.get("/login")
 def tela_login(request: Request):
     return templates.TemplateResponse(
         request,
@@ -103,11 +103,10 @@ def fazer_login(
    #Gerar o token JWT
 
     token_data = {
-        "sub": Usuario.email,
-        "nome": Usuario.nome,
-        "role": Usuario.role,
-        "id": Usuario.id,
-        
+        "sub": usuario.email,
+        "nome": usuario.nome,
+        "role": usuario.role,
+        "id": usuario.id,
     }
     token = criar_token(token_data)
 
@@ -120,8 +119,7 @@ def fazer_login(
         value=token,
         httponly=True,
         max_age=3600,
-        semesite="lax"
-
+        samesite="lax"
     )
 
     return response

@@ -1,25 +1,266 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Criar Conta</h1>
-    <form action="/auth/cadastro" method="post">
-        Nome: <input type="text" name="nome">
-        <br><br>
-        E-mail: <input type="email" name="email" required>
-        <br><br>
-        Senha: <input type="password" name="senha" minlength="4">
-        <br><br>
-        {% if erro %}
-            <p style="color: red;">{{ erro }}</p>
-        {% edif %}
-        <button type="submit">Cadastrar</button>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta</title>
 
-    </form>
-    <P>Já tem conta? <a href="/auth/login">Entrar</a></P>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+
+            background:
+                radial-gradient(circle at top left, #7f1d1d 0%, transparent 25%),
+                radial-gradient(circle at bottom right, #991b1b 0%, transparent 25%),
+                #0b0b0f;
+
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .card {
+            background: rgba(20, 20, 25, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(18px);
+            border-radius: 30px;
+            padding: 42px;
+            position: relative;
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, 0.45),
+                0 0 60px rgba(220, 38, 38, 0.15);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: rgba(220, 38, 38, 0.12);
+            border-radius: 50%;
+            top: -140px;
+            right: -100px;
+            filter: blur(35px);
+        }
+
+        .logo {
+            font-size: 34px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #b8b8c5;
+            line-height: 1.7;
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d6d6df;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+
+            background: rgba(255, 255, 255, 0.04);
+
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input::placeholder {
+            color: #7c7c8d;
+        }
+
+        input:focus {
+            border-color: #dc2626;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            box-shadow:
+                0 0 0 4px rgba(220, 38, 38, 0.15),
+                0 0 20px rgba(220, 38, 38, 0.15);
+        }
+
+        .erro {
+            background: rgba(220, 38, 38, 0.12);
+            color: #fca5a5;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+
+            padding: 14px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .btn {
+            width: 100%;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+
+            margin-top: 10px;
+
+            box-shadow:
+                0 10px 25px rgba(220, 38, 38, 0.28);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+
+            box-shadow:
+                0 14px 30px rgba(220, 38, 38, 0.35);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            color: #b8b8c5;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #f87171;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .footer a:hover {
+            color: #fecaca;
+        }
+
+        @media(max-width: 500px) {
+
+            .card {
+                padding: 30px;
+            }
+
+            .logo {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h1 class="logo">Criar Conta</h1>
+
+            <p class="subtitle">
+                Crie sua conta e acesse uma experiência moderna,
+                elegante e segura dentro da plataforma.
+            </p>
+
+            {% if erro %}
+            <div class="erro">
+                {{ erro }}
+            </div>
+            {% endif %}
+
+            <form action="/auth/cadastro" method="post">
+
+                <div class="input-group">
+                    <label>Nome</label>
+
+                    <input
+                        type="text"
+                        name="nome"
+                        placeholder="Digite seu nome"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>E-mail</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Digite seu e-mail"
+                        required
+                    >
+                </div>
+
+                <div class="input-group">
+                    <label>Senha</label>
+
+                    <input
+                        type="password"
+                        name="senha"
+                        placeholder="Crie uma senha segura"
+                        minlength="4"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn">
+                    Criar Conta
+                </button>
+
+            </form>
+
+            <div class="footer">
+                Já possui uma conta?
+                <a href="/auth/login">Entrar</a>
+            </div>
+
+        </div>
+
+    </div>
+
 </body>
+
 </html>
