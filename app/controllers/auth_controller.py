@@ -102,24 +102,34 @@ def fazer_login(
 
    #Gerar o token JWT
 
-token_data = {
-       "sub": Usuario.email,
-       "nome": Usuario.nome,
-       "role": Usuario.role,
-       "id": Usuario.id,
-       
-   }
-token = criar_token(token_data)
+    token_data = {
+        "sub": Usuario.email,
+        "nome": Usuario.nome,
+        "role": Usuario.role,
+        "id": Usuario.id,
+        
+    }
+    token = criar_token(token_data)
 
-#Salvar o token em cookie Httponly
+    #Salvar o token em cookie Httponly
 
-response = RedirectResponse(url="/", status_code=302)
+    response = RedirectResponse(url="/", status_code=302)
 
-response.set_cookie(
-    key="access_token",
-    value=token,
-    httponly=True,
-    max_age=3600,
-    semesite="lax"
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        max_age=3600,
+        semesite="lax"
 
-)
+    )
+
+    return response
+
+# Rota de saida
+
+@router.get("/logout")
+def sair():
+    response = RedirectResponse(url="/auth/login", status_code=302)
+    response.delete_cookie("access_token")
+    return response
