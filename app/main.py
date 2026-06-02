@@ -8,6 +8,8 @@ from app.controllers import admin_controller
 from app.controllers import categoria_controller
 from app.controllers import produto_controller
 from app.controllers import movimentacao_controller
+from app.controllers import pvd_controller
+from app.controllers import cliente_controller
 from app.auth import get_usuario_opcional
 
 app = FastAPI(title="Sistema Estoque")
@@ -24,7 +26,8 @@ app.include_router(admin_controller.router)
 app.include_router(categoria_controller.router)
 app.include_router(produto_controller.router)
 app.include_router(movimentacao_controller.router)
-
+app.include_router(pvd_controller.router)
+app.include_router(cliente_controller.router)
 
 
 
